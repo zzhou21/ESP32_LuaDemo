@@ -1,0 +1,7 @@
+## IDF Component Manager Manifest File
+dependencies:
+  georgik/lua: "==5.4.7"
+
+  ## Required IDF version
+  idf:
+    version: ">=4.1.0"
