@@ -58,8 +58,19 @@ local function process_rgb_to_gray(hex_input, width, height)
     return pixel_count, gray_buffer
 end
 
+-- Applies a brightness offset to the grayscale array
+-- offset can be positive for bright and negative for dark
+local function apply_brightness(gray_data, offset)
+    for i = 1, #gray_data do
+        local val = gray_data[i] + offset
+        if val < 0 then val = 0 end
+        if val > 255 then val = 255 end
+        gray_data[i] = val
+    end
+end
+
+
 function main(hex_input, width, height)
-    print("== Lua Luminance Test ==")
     print(string.format("Input Hex: %s", hex_input))
     print(string.format("Width: %d, Height: %d", width, height))
     print("------------------------")
@@ -67,11 +78,21 @@ function main(hex_input, width, height)
     local ret, gray_data = process_rgb_to_gray(hex_input, width, height)
     if ret < 0 then
         print("failed with error code:", ret)
-    else
-        print("successful. processed " .. ret .. " pixels.")
-        for i = 1, ret do
-            print(string.format("pixel %d grayscale: %d", i, gray_data[i]))
-        end
+        return
+    end
+    print("successful. processed " .. ret .. " pixels.")
+
+    for i = 1, ret do
+        print(string.format("pixel %d grayscale: %d", i, gray_data[i]))
+    end
+
+    -- Example: apply brightness offset of +50
+    print("------------------------")
+    print("Applying brightness +50 ...")
+    apply_brightness(gray_data, 50)
+
+    for i = 1, ret do
+        print(string.format("pixel %d after brightness: %d", i, gray_data[i]))
     end
 end
 
