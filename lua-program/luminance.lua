@@ -70,12 +70,26 @@ local function apply_brightness(gray_data, offset)
 end
 
 
-function main(hex_input, width, height)
-    print(string.format("Input Hex: %s", hex_input))
+function main()
+    local test_image_hex = table.concat({
+        "47704C47704C47704C0000FFFFFE04040347704C47704C",
+        "47704C95BF2BA9CB31467AB145194EFEFEF47704C47704C",
+        "47704C9AC32DFFFFF135EA41451941237A0BBCD47704C",
+        "000000FFFFFF49AEADB3D5E7C94265B94FFFFFF040503",
+        "000000FFFFFFFEE404E3D236363531979255485F13000000",
+        "47704CFFFFFFFEF02FF6F6F6F6E6EBF6E6EBF65F861C47704C",
+        "47704C47704CE1E1E1F4F4F4F6F6F678A023FEFEFE47704C",
+        "47704C47704C89B13B00000000000047704C47704CFFFFFF",
+    }, "")
+
+    local width  = 8
+    local height = 8
+
+    print(string.format("Input Hex: %s", test_image_hex))
     print(string.format("Width: %d, Height: %d", width, height))
     print("------------------------")
 
-    local ret, gray_data = process_rgb_to_gray(hex_input, width, height)
+    local ret, gray_data = process_rgb_to_gray(test_image_hex, width, height)
     if ret < 0 then
         print("failed with error code:", ret)
         return
@@ -86,7 +100,6 @@ function main(hex_input, width, height)
         print(string.format("pixel %d grayscale: %d", i, gray_data[i]))
     end
 
-    -- Example: apply brightness offset of +50
     print("------------------------")
     print("Applying brightness +50 ...")
     apply_brightness(gray_data, 50)
@@ -96,20 +109,3 @@ function main(hex_input, width, height)
     end
 end
 
--- for pc environment
-if arg then
-    -- get from input: hex, width, height
-    -- example input: FF0000FFFF00 2 2
-    local cli_hex    = arg[1] or "FF000000FF000000FF"
-    local cli_width  = tonumber(arg[2]) or 1
-    local cli_height = tonumber(arg[3]) or 3
-    
-    print("Detected command-line arguments:")
-    print("  Hex string :", cli_hex)
-    print("  Width      :", cli_width)
-    print("  Height     :", cli_height)
-    print("===============================")
-    
-    main(cli_hex, cli_width, cli_height)
-
-end
